@@ -1,12 +1,14 @@
 const COLS = 10;
 const ROWS = 20;
-const board = [];
+let board = [];
 const foods = ['banana', 'apple'];
 
 let tickInterval;
 let renderInterval;
 
 let tickCount;
+
+let score;
 
 // creates a new 4x4 shape in global variable 'current'
 // 4x4 so as to cover the size when the shape is rotated
@@ -27,31 +29,62 @@ function initBoard() {
 }
 
 function shiftBoard(offsetX = 0, offsetY = 0) {
-    function shiftSpace(y, x, row) {
-        let food = board[y][x];
-        let newX = x + offsetX;
-        let newY = y + offsetY;
-        if (food) {
-            if(newX < row.length && newX >= 0) {
-                board[y][x] = 0;
-            }
-            if (newX < row.length && newX >= 0 && newY < board.length && newY >= 0) {
-                board[newY][newX] = food;
-            }
-        }
+    // function shiftSpace(y, x, row) {
+    //     let food = board[y][x];
+    //     let newX = x + offsetX;
+    //     let newY = y + offsetY;
+    //     if (food) {
+    //         if(newX < row.length && newX >= 0) {
+    //             board[y][x] = 0;
+    //         }
+    //         if (newX < row.length && newX >= 0 && newY < board.length && newY >= 0) {
+    //             board[newY][newX] = food;
+    //         }
+    //         if (newY >= board.length) {
+    //             score+= 50;
+    //             console.log(score);
+    //         }
+    //     }
+    // }
+    //
+    // for (let y = board.length - 1; y >= 0; y--) {
+    //     const row = board[y];
+    //     if (offsetX > 0) {
+    //         for (let x = row.length - 1; x >= 0; x--) {
+    //             shiftSpace(y, x, row);
+    //         }
+    //     } else {
+    //         for (let x = 0; x < row.length; x++) {
+    //             shiftSpace(y, x, row);
+    //         }
+    //     }
+    // }
+
+
+    if (offsetY > 0) {
+        board.unshift(Array(COLS).fill(0));
+        board.pop();
+    } else if (offsetY < 0) {
+        board.push(Array(COLS).fill(0))
+        board.shift();
     }
 
-    for (let y = board.length - 1; y >= 0; y--) {
-        const row = board[y];
-        if (offsetX > 0) {
-            for (let x = row.length - 1; x >= 0; x--) {
-                shiftSpace(y, x, row);
+    if (offsetX > 0) {
+        board.forEach((row, index) => {
+            board[index].unshift(0);
+            if (row[row.length - 1]) {
+                board[index][row.length - 2] = row[row.length - 1];
             }
-        } else {
-            for (let x = 0; x < row.length; x++) {
-                shiftSpace(y, x, row);
+            board[index].pop();
+        });
+    } else if (offsetX < 0) {
+        board.forEach((row, index) => {
+            board[index].push(0);
+            if (row[0]) {
+                board[index][1] = row[0];
             }
-        }
+            board[index].shift();
+        });
     }
 }
 
@@ -73,13 +106,10 @@ function keyPress(key) {
             shiftBoard(1);
             break;
         case 'down':
-            shiftBoard(0, -1);
+            tick();
             break;
         case 'rotate':
-            var rotated = rotate(current);
-            if (valid(0, 0, rotated)) {
-                current = rotated;
-            }
+            shiftBoard(0, -1);
             break;
         case 'drop':
             while (valid(0, 1)) {
@@ -127,10 +157,11 @@ function playButtonClicked() {
 function newGame() {
     clearAllIntervals();
     tickCount = 0;
+    score = 0;
     renderInterval = setInterval(render, 30);
     initBoard();
 
-    tickInterval = setInterval(tick, 80);
+    tickInterval = setInterval(tick, 400);
 }
 
 function clearAllIntervals() {

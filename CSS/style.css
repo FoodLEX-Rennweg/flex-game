@@ -5,13 +5,12 @@ canvas {
 }
 
 #playbutton {
-    width: 100px;
-    height: 50px;
+    width: 80px;
+    height: 30px;
     display: block;
-    margin: auto;
-    margin-top: 10px;
+    margin: 10px auto auto;
     font-family: Arial, sans-serif;
-    font-size: 30px;
+    font-size: 15px;
     font-weight: bold;
     background-color: white;
     cursor: pointer;
