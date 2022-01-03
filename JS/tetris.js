@@ -1,6 +1,7 @@
 const COLS = 10;
 const ROWS = 20;
 let board = [];
+
 const foods = ['banana', 'apple'];
 
 let tickInterval;
@@ -29,37 +30,6 @@ function initBoard() {
 }
 
 function shiftBoard(offsetX = 0, offsetY = 0) {
-    // function shiftSpace(y, x, row) {
-    //     let food = board[y][x];
-    //     let newX = x + offsetX;
-    //     let newY = y + offsetY;
-    //     if (food) {
-    //         if(newX < row.length && newX >= 0) {
-    //             board[y][x] = 0;
-    //         }
-    //         if (newX < row.length && newX >= 0 && newY < board.length && newY >= 0) {
-    //             board[newY][newX] = food;
-    //         }
-    //         if (newY >= board.length) {
-    //             score+= 50;
-    //             console.log(score);
-    //         }
-    //     }
-    // }
-    //
-    // for (let y = board.length - 1; y >= 0; y--) {
-    //     const row = board[y];
-    //     if (offsetX > 0) {
-    //         for (let x = row.length - 1; x >= 0; x--) {
-    //             shiftSpace(y, x, row);
-    //         }
-    //     } else {
-    //         for (let x = 0; x < row.length; x++) {
-    //             shiftSpace(y, x, row);
-    //         }
-    //     }
-    // }
-
 
     if (offsetY > 0) {
         board.unshift(Array(COLS).fill(0));
@@ -88,6 +58,15 @@ function shiftBoard(offsetX = 0, offsetY = 0) {
     }
 }
 
+function evaluateLastRow() {
+    board[board.length - 1].forEach(e => {
+            if (e) {
+                score += 50;
+            }
+        }
+    )
+}
+
 // keep the element moving down, creating new shapes and clearing lines
 function tick() {
     shiftBoard(0, 1);
@@ -95,6 +74,8 @@ function tick() {
         newFood();
     }
     tickCount++;
+    evaluateLastRow();
+    renderBaskets();
 }
 
 function keyPress(key) {
@@ -152,13 +133,14 @@ function valid(offsetX, offsetY, newCurrent) {
 function playButtonClicked() {
     newGame();
     document.getElementById("playbutton").disabled = true;
+
 }
 
 function newGame() {
     clearAllIntervals();
     tickCount = 0;
     score = 0;
-    renderInterval = setInterval(render, 30);
+    renderInterval = setInterval(renderTetris, 30);
     initBoard();
 
     tickInterval = setInterval(tick, 400);

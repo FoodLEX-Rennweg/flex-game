@@ -1,10 +1,4 @@
+const baskets = ["R", "R", "R", "NR", "C1", "C1", "C2", "C2", "C3", "C3"];
+let countries = [];
 
 
-function putButtons() {
-    values.forEach(v => {
-        let node = document.createElement('button');
-        node.setAttribute('width', `${ FOOD_WIDTH }px`)
-        document.getElementsByTagName('body')[0].appendChild(node)
-    })
-
-}
