@@ -2,7 +2,7 @@ const COLS = 10;
 const ROWS = 20;
 let board = [];
 
-const foods = ['banana', 'apple'];
+const seasonId = 1; //TODO: randomized season
 
 let tickInterval;
 let renderInterval;
@@ -14,7 +14,7 @@ let score;
 // creates a new 4x4 shape in global variable 'current'
 // 4x4 so as to cover the size when the shape is rotated
 function newFood() {
-    let food = new Food(1);
+    let food = new Food(11);
     let rnd = Math.floor(Math.random() * COLS);
     board[0][rnd] = food;
 }
@@ -59,9 +59,29 @@ function shiftBoard(offsetX = 0, offsetY = 0) {
 }
 
 function evaluateLastRow() {
-    board[board.length - 1].forEach(e => {
+    board[board.length - 1].forEach((e, index) => {
             if (e) {
-                score += 50;
+                const usedBasket = baskets[index];
+                const regioEntry = foodRegionalities[e.foodId - 1];
+
+                const regionalSeason = regioEntry['R']
+                const country = regioEntry['NR']
+                const co2Usages = regioEntry['CO2']
+
+                switch (usedBasket.charAt(0)) {
+                    case 'R':
+                        if (regionalSeason === seasonId) {
+                            score += 50;
+                        }
+                            break;
+                    case 'C':
+                    case 'N':
+                        if(regionalSeason !== seasonId) {
+                            score += 50;
+                        }
+                        break;
+                }
+                console.log(score)
             }
         }
     )
