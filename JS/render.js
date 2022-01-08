@@ -1,10 +1,14 @@
 let tetrisCanvas = document.getElementById('tetris-canvas');
 let basketCanvas = document.getElementById('basket-canvas');
 
-const TETRIS_WIDTH = 450, TETRIS_HEIGHT = 900; // TODO: unify (get width and height from element)
-const BASKETS_HEIGHT = 30; // TODO: unify (get width and height from element)
+const TETRIS_WIDTH = tetrisCanvas.width
+const TETRIS_HEIGHT = tetrisCanvas.height;
+const BASKETS_HEIGHT = basketCanvas.height; // TODO: unify (get width and height from element)
 const FOOD_WIDTH = TETRIS_WIDTH / COLS
 const FOOD_HEIGHT = TETRIS_HEIGHT / ROWS;
+
+const FLAG_WIDTH = FOOD_WIDTH / 2 ;
+const FLAG_HEIGHT = BASKETS_HEIGHT / 2;
 
 let tetrisCtx = tetrisCanvas.getContext('2d');
 let basketCtx = basketCanvas.getContext('2d');
@@ -30,6 +34,8 @@ function drawFood(x, y, food) {
 }
 
 function renderBaskets() {
+    basketCtx.clearRect(0, 0, TETRIS_WIDTH, BASKETS_HEIGHT);
+
     let currentBasket = baskets[0];
     let currentBasketLength = 0;
     baskets.forEach((b, i) => {
@@ -46,8 +52,6 @@ function renderBaskets() {
 }
 
 function drawBasket(basket, length, index) {
-    gap = 5;
-
     switch (basket.charAt(0)) {
         case 'R':
             basketCtx.fillStyle = 'red';
@@ -63,5 +67,21 @@ function drawBasket(basket, length, index) {
             break;
     }
 
-    basketCtx.fillRect(FOOD_WIDTH * (index - length), 0, FOOD_WIDTH * length, BASKETS_HEIGHT);
+
+    for (let i = 0; i < length; i++) {
+        let img;
+        if (length <= 1) {
+            img = basketImages[3]
+        } else if (i === 0) {
+            img = basketImages[0];
+        } else if (i === length - 1) {
+            img = basketImages[2];
+        } else {
+            img = basketImages[1];
+        }
+        basketCtx.drawImage(img, FOOD_WIDTH * (index - length + i), 0, FOOD_WIDTH, BASKETS_HEIGHT);
+    }
+
+    basketCtx.drawImage(flagImages[1], FOOD_WIDTH * (index - length) + ((length - 1) * (FOOD_WIDTH / 2)) + FLAG_WIDTH/2, (BASKETS_HEIGHT/2 - FLAG_HEIGHT / 2), FOOD_WIDTH/2, BASKETS_HEIGHT/2);
+
 }

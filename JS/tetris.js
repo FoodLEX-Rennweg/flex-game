@@ -1,5 +1,5 @@
-const COLS = 10;
-const ROWS = 20;
+const COLS = 6;
+const ROWS = 16;
 let board = [];
 
 const seasonId = 1; //TODO: randomized season
@@ -14,7 +14,7 @@ let score;
 // creates a new 4x4 shape in global variable 'current'
 // 4x4 so as to cover the size when the shape is rotated
 function newFood() {
-    let food = new Food(11);
+    let food = new Food(Math.floor(Math.random() * (foodNames.length - 1) + 1));
     let rnd = Math.floor(Math.random() * COLS);
     board[0][rnd] = food;
 }
