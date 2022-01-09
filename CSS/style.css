@@ -1,17 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+body {
+    overflow: hidden;
+    background: url("../media/bg.svg");
+    background-size: cover;
+}
+
 canvas {
     display: block;
     margin: auto;
-    border: 1px solid black;
 }
 
-#playbutton {
-    width: 80px;
-    height: 30px;
+.ui-btn {
+    width: 70px;
+    height: 70px;
+    margin: 30px 20px;
+
     display: block;
-    margin: 10px auto auto;
-    font-family: Arial, sans-serif;
-    font-size: 15px;
-    font-weight: bold;
-    background-color: white;
     cursor: pointer;
+    background-color: #082336;
+    border-radius: 10px;
+    border: 4px outset #efefef;
+}
+
+.filter-white {
+    filter: invert(100%) sepia(1%) saturate(7500%) hue-rotate(141deg) brightness(112%) contrast(101%);
+    width: 38px;
+}
+
+.ui-btn:disabled {
+    border-style: inset;
+    opacity: 0.6;
+}
+
+.ui-btn:hover {
+    border-style: inset;
+}
+
+#play-btn {
+    background-color: #54882e;
+}
+
+#retry-btn {
+    background-color: #e04f0d;
+}
+
+#home-btn {
+    background-color: #1D2934FF;
+}
+
+.center-container {
+    display: block;
+    width: min-content;
+    margin: auto;
+}
+
+.season-image-container {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 8px;
+}
+
+#season-img {
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    grid-template-rows: auto 2.7fr 0.7fr;
+    gap: 0px 0px;
+    grid-template-areas:
+    "season game score"
+    ". game buttons";
+
+    font-family: 'Press Start 2P', cursive;
+
+}
+
+.season {
+    grid-area: season;
+    background-color: #1d2934;
+    color: white;
+    display: block;
+    float: right;
+    border: 10px groove #4D6D87;
+    margin: 20px;
+    padding-bottom: 5px;
+    text-align: center;
+}
+
+.game {
+    grid-area: game;
+    border: 20px groove #c74024;
+
+    background: url("../media/game-bg.svg");
+    background-size: cover;
+}
+
+.score {
+    grid-area: score;
+    background-color: #c9ec8c;
+    border: 10px groove #8AB825;
+    margin: 20px;
+    padding: 30px;
+    height: 50px;
+}
+
+.score * {
+    margin: 5px;
+}
+
+.buttons {
+    grid-area: buttons;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.results {
+    width: 1500px;
+}
+
+.result-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
 }

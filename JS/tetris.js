@@ -1,20 +1,31 @@
 const COLS = 6;
 const ROWS = 16;
+
+const DEFAULT_TICK_DELAY = 400;
+const SPEED_INCREASE_MILLIS = 30;
+MIN_TICK_DELAY = 150;
+let speedUpFlag;
+
+let tickDelay;
+
 let board = [];
+let currentCountries = [];
 
 const seasonId = 1; //TODO: randomized season
 
 let tickInterval;
 let renderInterval;
+let speedUpInterval;
 
 let tickCount;
 
 let score;
+const scoreTxt = document.getElementById('score-txt');
 
 // creates a new 4x4 shape in global variable 'current'
 // 4x4 so as to cover the size when the shape is rotated
 function newFood() {
-    let food = new Food(Math.floor(Math.random() * (foodNames.length - 1) + 1));
+    let food = new Food(Math.floor(Math.random() * (foodNames.length) + 1));
     let rnd = Math.floor(Math.random() * COLS);
     board[0][rnd] = food;
 }
@@ -58,6 +69,10 @@ function shiftBoard(offsetX = 0, offsetY = 0) {
     }
 }
 
+function updateScoreTxt() {
+    scoreTxt.innerText = score;
+}
+
 function evaluateLastRow() {
     board[board.length - 1].forEach((e, index) => {
             if (e) {
@@ -73,15 +88,20 @@ function evaluateLastRow() {
                         if (regionalSeason === seasonId) {
                             score += 50;
                         }
-                            break;
+                        break;
                     case 'C':
+                        let basketNum = Number(usedBasket.charAt(1));
+                        if (currentCountries[basketNum - 1] === country) {
+                            score += 100;
+                        }
+                        break;
                     case 'N':
-                        if(regionalSeason !== seasonId) {
+                        if (regionalSeason !== seasonId) {
                             score += 50;
                         }
                         break;
                 }
-                console.log(score)
+                updateScoreTxt();
             }
         }
     )
@@ -90,12 +110,17 @@ function evaluateLastRow() {
 // keep the element moving down, creating new shapes and clearing lines
 function tick() {
     shiftBoard(0, 1);
-    if (tickCount % 5 === 0) {
+    if (tickCount % 8 === 0) {
         newFood();
     }
     tickCount++;
     evaluateLastRow();
     renderBaskets();
+
+    if (speedUpFlag) {
+        clearInterval(tickInterval);
+        tickInterval = setInterval(tick, tickDelay);
+    }
 }
 
 function keyPress(key) {
@@ -140,7 +165,7 @@ function valid(offsetX, offsetY, newCurrent) {
                     || x + offsetX >= COLS) {
                     if (offsetY == 1 && freezed) {
                         lose = true; // lose if the current shape is settled at the top most row
-                        document.getElementById('playbutton').disabled = false;
+                        document.getElementById('play-btn').disabled = false;
                     }
                     return false;
                 }
@@ -150,25 +175,68 @@ function valid(offsetX, offsetY, newCurrent) {
     return true;
 }
 
-function playButtonClicked() {
+function startGame() {
     newGame();
-    document.getElementById("playbutton").disabled = true;
+    document.getElementById("play-btn").disabled = true;
+}
 
+function retryGame() {
+    currentCountries = getRandomizedCountries();
+    renderBaskets();
+    startGame();
+    updateScoreTxt();
+    
+}
+
+function generateRandomSeason() {
+    const seasonImg = document.getElementById("season-img");
+    let rnd = Math.floor(Math.random() * 4 + 1)
+    seasonImg.src = '../media/seasons/' + rnd + '.png'
+
+    seasonImg.style.display = 'block';
+}
+
+function increaseSpeed() {
+    if (tickDelay - SPEED_INCREASE_MILLIS > MIN_TICK_DELAY) {
+        tickDelay -= SPEED_INCREASE_MILLIS;
+    } else {
+        tickDelay = MIN_TICK_DELAY;
+        clearInterval(speedUpInterval);
+    }
+    speedUpFlag = true;
 }
 
 function newGame() {
+    generateRandomSeason();
+
+    tickDelay = DEFAULT_TICK_DELAY;
     clearAllIntervals();
     tickCount = 0;
     score = 0;
-    renderInterval = setInterval(renderTetris, 30);
     initBoard();
 
-    tickInterval = setInterval(tick, 400);
+    renderInterval = setInterval(renderTetris, 30);
+    tickInterval = setInterval(tick, tickDelay);
+    speedUpInterval = setInterval(increaseSpeed, 10000)
 }
 
 function clearAllIntervals() {
     clearInterval(renderInterval);
     clearInterval(tickInterval);
+}
+
+function getRandomizedCountries() {
+    let result = [];
+
+    for (let i = 0; i < 3; i++) {
+        let n = Math.floor(Math.random() * (flagNames.length - 1) + 2)
+        if (!result.includes(n)) {
+            result[i] = n;
+        } else {
+            i--;
+        }
+    }
+    return result;
 }
 
 function printBoard() {

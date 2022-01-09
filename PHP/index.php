@@ -25,23 +25,60 @@ $food_country = $query->fetchAll();
 $food_country = json_encode($food_country);
 ?>
 
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
         <title>HTML5 Tetris</title>
         <link rel='stylesheet' href='../CSS/style.css'/>
     </head>
-    <body>
-    <canvas id="tetris-canvas" width='450' height='900'></canvas>
-    <canvas id="basket-canvas" width='450' height='90'></canvas>
-    <button id="playbutton" onclick="playButtonClicked();">Play</button>
+<body>
+<div class="center-container">
+    <div class="results">
+        <img class="result-img" src="../media/result-bg.svg">
+    </div>
+</div>
+
+<div class="center-container">
+        <div class="container">
+            <div class="season">
+                <div class="season-image-container">
+                    <img id="season-img" src="../media/seasons/1.png">
+                </div>
+                <span>SAISON</span>
+            </div>
+            <div class="game">
+                <canvas id="tetris-canvas" width='500' height='750'></canvas>
+                <canvas id="basket-canvas" width='500' height='90'></canvas>
+            </div>
+            <div class="score">
+                <div>SCORE:</div>
+                <div id="score-txt">0</div>
+            </div>
+            <div class="buttons">
+                <button class= "ui-btn" id="play-btn" onclick="startGame();">
+                    <img src="../media/icons/play.svg" class="filter-white"/>
+                </button>
+
+                <button class= "ui-btn" id="retry-btn" onclick="retryGame();">
+                    <img src="../media/icons/undo.svg" class="filter-white"/>
+                </button>
+
+                <button class= "ui-btn" id="home-btn" onclick="location.href='https://foodlex.42web.io/'">
+                    <img src="../media/icons/home.svg" class="filter-white"/>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+
 
     <script src='../JS/food.js'></script>
-    <script src='../JS/tetris.js'></script>
+    <script src='../JS/tetris.js' defer></script>
     <script src='../JS/baskets.js'></script>
     <script src='../JS/flags.js'></script>
     <script src='../JS/controller.js'></script>
-    <script src='../JS/render.js'></script>
+    <script src='../JS/render.js' defer></script>
     <script>
         const foodNames = <?php echo $foodNames; ?>;
         const foodsToCountries = <?php echo $food_country; ?>;
@@ -70,6 +107,9 @@ $food_country = json_encode($food_country);
 
         console.log(foodsToCountries)
         console.log(flagNames)
+
+        const globeImg = new Image();
+        globeImg.src = '../media/flags/globe.png';
 
         let foodRegionalities = [];
         foodsToCountries.forEach(row => {
@@ -101,7 +141,9 @@ $food_country = json_encode($food_country);
         })
         console.log(foodRegionalities);
 
+
         window.onload = function () {
+            currentCountries = getRandomizedCountries();
             renderBaskets();
         }
     </script>
