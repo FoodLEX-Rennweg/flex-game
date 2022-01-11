@@ -1,4 +1,4 @@
-const COLS = 6;
+const COLS = 7;
 const ROWS = 16;
 
 const DEFAULT_TICK_DELAY = 400;
@@ -16,11 +16,15 @@ const seasonId = 1; //TODO: randomized season
 let tickInterval;
 let renderInterval;
 let speedUpInterval;
+let timerInterval;
 
 let tickCount;
 
 let score;
 const scoreTxt = document.getElementById('score-txt');
+
+let wrongItems = {};
+let penaltyCo2 = 0;
 
 // creates a new 4x4 shape in global variable 'current'
 // 4x4 so as to cover the size when the shape is rotated
@@ -74,6 +78,15 @@ function updateScoreTxt() {
 }
 
 function evaluateLastRow() {
+    function addWrongItem(foodId, co2 = 0) {
+        if (wrongItems[foodId]) {
+            wrongItems[foodId]++;
+        } else {
+            wrongItems[foodId] = 1;
+        }
+        penaltyCo2 += co2
+    }
+
     board[board.length - 1].forEach((e, index) => {
             if (e) {
                 const usedBasket = baskets[index];
@@ -87,17 +100,21 @@ function evaluateLastRow() {
                     case 'R':
                         if (regionalSeason === seasonId) {
                             score += 50;
+                        } else {
+                            addWrongItem(e.foodId);
                         }
                         break;
                     case 'C':
                         let basketNum = Number(usedBasket.charAt(1));
                         if (currentCountries[basketNum - 1] === country) {
-                            score += 100;
+                            score += 150;
                         }
                         break;
                     case 'N':
                         if (regionalSeason !== seasonId) {
                             score += 50;
+                        } else {
+                            addWrongItem(e.foodId, co2Usages[1]);
                         }
                         break;
                 }
@@ -185,7 +202,10 @@ function retryGame() {
     renderBaskets();
     startGame();
     updateScoreTxt();
-    
+}
+
+function stopGame() {
+    clearAllIntervals();
 }
 
 function generateRandomSeason() {
@@ -217,12 +237,18 @@ function newGame() {
 
     renderInterval = setInterval(renderTetris, 30);
     tickInterval = setInterval(tick, tickDelay);
-    speedUpInterval = setInterval(increaseSpeed, 10000)
+    speedUpInterval = setInterval(increaseSpeed, 10000);
+
+
+    const timerSpan = document.getElementById("timer-span");
+    startTimer(15, timerSpan);
 }
 
 function clearAllIntervals() {
     clearInterval(renderInterval);
     clearInterval(tickInterval);
+    clearInterval(speedUpInterval);
+    clearInterval(timerInterval);
 }
 
 function getRandomizedCountries() {
@@ -237,6 +263,47 @@ function getRandomizedCountries() {
         }
     }
     return result;
+}
+
+function showResults() {
+    let game = document.getElementsByClassName("container")[0];
+    let results = document.getElementsByClassName("results-container")[0];
+    game.style.display = 'none';
+    results.style.display = 'block';
+
+    for (let key in wrongItems) {
+        let wrongList = document.getElementById('wrong-list');
+        let listEntry = document.createElement('div');
+        listEntry.className = 'wrong-item';
+        listEntry.innerHTML =
+            `<img src="../media/food-icons/${key}.png">
+             <span class="wrong-item-text">x ${wrongItems[key]}</span>`
+        wrongList.appendChild(listEntry);
+    }
+
+    document.getElementById('co2-span').innerText = penaltyCo2;
+}
+
+function startTimer(duration, display) {
+    let timer = duration, minutes, seconds;
+    tickTimer()
+
+    timerInterval = setInterval(tickTimer, 1000);
+
+    function tickTimer() {
+        minutes = parseInt(timer / 60, 10);
+        seconds = parseInt(timer % 60, 10);
+
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+
+        display.textContent = minutes + ":" + seconds;
+
+        if (--timer < 0) {
+            stopGame();
+            showResults();
+        }
+    }
 }
 
 function printBoard() {

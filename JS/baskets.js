@@ -1,4 +1,4 @@
-const baskets = ["R", "R", "NR", "C1", "C2", "C3"];
+const baskets = ["R", "R", "NR", "NR", "C1", "C2", "C3"];
 const basketImages = [
     new Image(), new Image(), new Image(), new Image()
 ]
