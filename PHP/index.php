@@ -52,6 +52,34 @@ $food_country = json_encode($food_country);
     </div>
 </div>
 
+<div class="tutorial">
+    <div class="tutorial-content">
+        <h1>Willkommen zum Spiel</h1>
+
+        <h2>Wie man spielt:</h2>
+        <p>Zu Beginn des Spiels wird eine zufällige Jahreszeit zugewiesen, in der du sozusagen "einkaufst".</p>
+        <p>
+            - In immer schneller werdenden Zeitabständen werden von oben Lebensmittel herunterfallen, welche zu der
+            derzeitigen
+            Jahreszeit entweder <br/>
+            <span class="bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Regional</span>
+            <img src="../media/flags/1.png">
+            <br/>oder<br/>
+            <span class="bold">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Nicht Regional</span>
+            <img src="../media/flags/globe.png">
+            <br/>sein können
+        </p>
+        <p>- Deine Aufgabe ist es, die fallenden Lebensmittel in die richtige Körbe fallen zu lassen um Punkte zu
+            bekommen.
+        </p>
+
+        <p>Zusätzliche Punkte bekommt man, wenn man das Lebensmittel dem richtigen Land zuordnen kann</p>
+        <p>- Verwende die Pfeiltasten 🡐 🡒 🡓 um die Lebensmittel nach links, rechts oder unten zu schieben</p>
+    </div>
+    <button class="close-btn" onclick="dismiss(this);">Schließen</button>
+
+</div>
+
 <div class="center-container">
     <div class="container">
         <div class="season">
@@ -73,10 +101,15 @@ $food_country = json_encode($food_country);
                 <span id="timer-span">00:00</span>
             </div>
             <div class="food-name">
-                <span id="food-name-span"></span>
+                <span id="food-name-span">NAME</span>
             </div>
         </div>
         <div class="buttons">
+
+            <button class="ui-btn" id="info-btn" onclick="showTutorial()">
+                <img src="../media/icons/info.svg" class="filter-white"/>
+            </button>
+
             <button class="ui-btn" id="play-btn" onclick="startGame();">
                 <img src="../media/icons/play.svg" class="filter-white"/>
             </button>
@@ -161,6 +194,28 @@ $food_country = json_encode($food_country);
         currentCountries = getRandomizedCountries();
         renderBaskets();
     }
+
+    function dismiss(element) {
+        element.parentNode.style.opacity = '0';
+        window.setTimeout(() => {
+            element.parentNode.style.visibility = 'hidden';
+        }, 600)
+    }
+
+    function showTutorial() {
+        document.getElementsByClassName('tutorial')[0].style.opacity = '1';
+        document.getElementsByClassName('tutorial')[0].style.visibility = 'visible';
+    }
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        if (!localStorage.getItem("pageloadcount")) {
+            let tutorial = document.getElementsByClassName('tutorial')[0];
+            tutorial.style.visibility = 'visible';
+        }
+        localStorage.setItem("pageloadcount", "1");
+    });
 </script>
 </body>
 </html>
