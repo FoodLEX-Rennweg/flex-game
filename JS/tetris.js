@@ -3,7 +3,9 @@ const ROWS = 16;
 
 const DEFAULT_TICK_DELAY = 400;
 const SPEED_INCREASE_MILLIS = 30;
-MIN_TICK_DELAY = 150;
+const MIN_TICK_DELAY = 150;
+const GAME_DURATION = 20;
+
 let speedUpFlag;
 
 let tickDelay;
@@ -11,14 +13,17 @@ let tickDelay;
 let board = [];
 let currentCountries = [];
 
-const seasonId = 1; //TODO: randomized season
-
+const seasonId = 1;
 let tickInterval;
 let renderInterval;
 let speedUpInterval;
 let timerInterval;
 
 let tickCount;
+
+let fallingFoodNames = [];
+const foodNameTxt = document.getElementById('food-name-span');
+
 
 let score;
 const scoreTxt = document.getElementById('score-txt');
@@ -27,11 +32,18 @@ let wrongItems = {};
 let penaltyCo2 = 0;
 
 // creates a new 4x4 shape in global variable 'current'
+function updateFoodNameTxt() {
+    foodNameTxt.innerText = fallingFoodNames[fallingFoodNames.length - 1];
+}
+
 // 4x4 so as to cover the size when the shape is rotated
 function newFood() {
     let food = new Food(Math.floor(Math.random() * (foodNames.length) + 1));
     let rnd = Math.floor(Math.random() * COLS);
     board[0][rnd] = food;
+
+    fallingFoodNames.unshift(foodNames[food.foodId - 1]);
+    updateFoodNameTxt()
 }
 
 // clears the board
@@ -118,6 +130,9 @@ function evaluateLastRow() {
                         }
                         break;
                 }
+                fallingFoodNames.pop();
+
+                updateFoodNameTxt()
                 updateScoreTxt();
             }
         }
@@ -241,7 +256,7 @@ function newGame() {
 
 
     const timerSpan = document.getElementById("timer-span");
-    startTimer(15, timerSpan);
+    startTimer(GAME_DURATION, timerSpan);
 }
 
 function clearAllIntervals() {
@@ -268,8 +283,9 @@ function getRandomizedCountries() {
 function showResults() {
     let game = document.getElementsByClassName("container")[0];
     let results = document.getElementsByClassName("results-container")[0];
-    game.style.display = 'none';
-    results.style.display = 'block';
+    results.style.visibility = 'visible';
+    results.style.opacity = '1';
+    game.style.opacity = '0';
 
     for (let key in wrongItems) {
         let wrongList = document.getElementById('wrong-list');

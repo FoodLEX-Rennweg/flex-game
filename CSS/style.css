@@ -100,6 +100,9 @@ canvas {
 
     background: url("../media/game-bg.svg");
     background-size: cover;
+
+    opacity: 1;
+    transition: opacity ease-in-out 1.5s;
 }
 
 .ui-right {
@@ -112,6 +115,7 @@ canvas {
     margin: 20px;
     padding: 30px;
     height: 50px;
+    width: 150px;
 }
 
 .timer {
@@ -120,12 +124,25 @@ canvas {
     margin: 20px;
     padding: 30px;
     height: 15px;
+    width: 150px;
+
 
     text-align: center;
 }
 
 .score * {
     margin: 5px;
+}
+
+.food-name {
+    background-color: #f5d9a8;
+    border: 10px groove #ec6a0d;
+    margin: 20px;
+    padding: 30px;
+    height: 15px;
+    width: 200px;
+
+    text-align: center;
 }
 
 .buttons {
@@ -162,12 +179,21 @@ canvas {
 }
 
 .results-container {
-    position: relative;
-    width: 95%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+
+    width: 85%;
     height: 850px;
     margin-top: 50px;
 
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+
+    z-index: 1;
+    transition: opacity ease-in-out 1.5s;
 }
 
 .results-container::before {
@@ -230,5 +256,16 @@ canvas {
     height: 40px;
 }
 
-.wrong-item-text {
+.back-btn {
+    background-color: #37b44a;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 20px;
+    padding-left: 50px;
+    padding-right: 50px;
+    margin-top: 150px;
+
+    font-family: "Adelle", serif;
+    font-size: 20px;
 }

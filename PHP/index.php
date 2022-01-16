@@ -39,12 +39,15 @@ $food_country = json_encode($food_country);
             <h2>Dein Fußabdruck beträgt:</h2>
             <span class="co2" id="co2-span">0 </span>
             <span class="co2">&nbsp;Fußabdruck</span>
+            <br>
+            <button class="back-btn" onclick="location.reload()">Zurück</button>
         </div>
         <div class="results-list">
             <h2>Falsch zugeordnete Produkte</h2>
 
             <div id="wrong-list">
             </div>
+
         </div>
     </div>
 </div>
@@ -68,6 +71,9 @@ $food_country = json_encode($food_country);
             </div>
             <div class="timer">
                 <span id="timer-span">00:00</span>
+            </div>
+            <div class="food-name">
+                <span id="food-name-span"></span>
             </div>
         </div>
         <div class="buttons">
