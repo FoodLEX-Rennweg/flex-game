@@ -248,6 +248,7 @@ function newGame() {
     clearAllIntervals();
     tickCount = 0;
     score = 0;
+    fallingFoodNames = [];
     initBoard();
 
     renderInterval = setInterval(renderTetris, 30);

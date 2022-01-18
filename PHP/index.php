@@ -36,9 +36,9 @@ $food_country = json_encode($food_country);
     <div class="results">
         <div class="results-txt">
             <h1>Glückwunsch!</h1>
-            <h2>Dein Fußabdruck beträgt:</h2>
+            <h2>Dein CO₂ Verbrauch beträgt:</h2>
             <span class="co2" id="co2-span">0 </span>
-            <span class="co2">&nbsp;Fußabdruck</span>
+            <span class="co2">&nbsp;Tonnen CO₂</span>
             <br>
             <button class="back-btn" onclick="location.reload()">Zurück</button>
         </div>
@@ -88,9 +88,11 @@ $food_country = json_encode($food_country);
             </div>
             <span>SAISON</span>
         </div>
-        <div class="game">
-            <canvas id="tetris-canvas" width='600' height='800'></canvas>
-            <canvas id="basket-canvas" width='600' height='90'></canvas>
+        <div class="game-area">
+            <div class="game">
+                <canvas id="tetris-canvas" height='800'></canvas>
+                <canvas id="basket-canvas" height='90'></canvas>
+            </div>
         </div>
         <div class="ui-right">
             <div class="score">
@@ -121,6 +123,11 @@ $food_country = json_encode($food_country);
             <button class="ui-btn" id="home-btn" onclick="location.href='http://foodlex.42web.io/'">
                 <img src="../media/icons/home.svg" class="filter-white"/>
             </button>
+        </div>
+        <div class="credits-area">
+            <div class="credits">
+                Flag Icons by <a target="_blank" href="https://icons8.com">Icons8</a>
+            </div>
         </div>
     </div>
 
@@ -158,9 +165,6 @@ $food_country = json_encode($food_country);
         img.src = '../media/flags/' + (i + 1) + '.png';
         flagImages.push(img);
     }
-
-    console.log(foodsToCountries)
-    console.log(flagNames)
 
     const globeImg = new Image();
     globeImg.src = '../media/flags/globe.png';
@@ -210,9 +214,11 @@ $food_country = json_encode($food_country);
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
+        let tutorial = document.getElementsByClassName('tutorial')[0];
         if (!localStorage.getItem("pageloadcount")) {
-            let tutorial = document.getElementsByClassName('tutorial')[0];
             tutorial.style.visibility = 'visible';
+        } else {
+            tutorial.style.opacity = '0';
         }
         localStorage.setItem("pageloadcount", "1");
     });

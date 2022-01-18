@@ -1,21 +1,27 @@
 let tetrisCanvas = document.getElementById('tetris-canvas');
 let basketCanvas = document.getElementById('basket-canvas');
 
-const TETRIS_WIDTH = tetrisCanvas.width
-const TETRIS_HEIGHT = tetrisCanvas.height;
-const BASKETS_HEIGHT = basketCanvas.height; // TODO: unify (get width and height from element)
-const BOX_WIDTH = TETRIS_WIDTH / COLS
-const BOX_HEIGHT = TETRIS_HEIGHT / ROWS;
+let canvasWrapperRect = document.getElementsByClassName('game')[0].getBoundingClientRect();
+tetrisCanvas.width = canvasWrapperRect.width - 40;
+basketCanvas.width = canvasWrapperRect.width - 40;
+basketCanvas.height = (canvasWrapperRect.width - 40) * 0.15;
+tetrisCanvas.height = canvasWrapperRect.height - basketCanvas.height - 40;
+window.onresize = updateCanvasSize;
 
-const FOOD_WIDTH = BOX_WIDTH * 0.7;
-const FOOD_HEIGHT = BOX_HEIGHT * 0.7;
+let TETRIS_WIDTH = tetrisCanvas.width
+let TETRIS_HEIGHT = tetrisCanvas.height;
+let BASKETS_HEIGHT = basketCanvas.height; // TODO: unify (get width and height from element)
+let BOX_WIDTH = TETRIS_WIDTH / COLS
+let BOX_HEIGHT = TETRIS_HEIGHT / ROWS;
 
-const FLAG_WIDTH = BOX_WIDTH / 2;
-const FLAG_HEIGHT = BASKETS_HEIGHT / 2;
+let FOOD_WIDTH = BOX_WIDTH * 0.7;
+let FOOD_HEIGHT = BOX_HEIGHT * 0.7;
+
+let FLAG_WIDTH = BOX_WIDTH / 2;
+let FLAG_HEIGHT = BASKETS_HEIGHT / 2;
 
 let tetrisCtx = tetrisCanvas.getContext('2d');
 let basketCtx = basketCanvas.getContext('2d');
-
 
 
 function renderTetris() {
@@ -91,6 +97,26 @@ function drawBasket(basket, length, index) {
 
     basketCtx.filter = 'none';
     basketCtx.drawImage(flagImg, BOX_WIDTH * (index - length) + ((length - 1) * (BOX_WIDTH / 2)) + FLAG_WIDTH / 2, (BASKETS_HEIGHT / 2 - FLAG_HEIGHT / 2), BOX_WIDTH / 2, BASKETS_HEIGHT / 2);
+}
 
+function updateCanvasSize() {
+    console.log("resize");
+    canvasWrapperRect = document.getElementsByClassName('game')[0].getBoundingClientRect();
 
+    tetrisCanvas.width = canvasWrapperRect.width - 40;
+    basketCanvas.width = canvasWrapperRect.width - 40;
+    basketCanvas.height = (canvasWrapperRect.width - 40) * 0.15;
+    tetrisCanvas.height = canvasWrapperRect.height - basketCanvas.height - 40;
+
+    TETRIS_WIDTH = tetrisCanvas.width
+    TETRIS_HEIGHT = tetrisCanvas.height;
+    BASKETS_HEIGHT = basketCanvas.height; // TODO: unify
+    BOX_WIDTH = TETRIS_WIDTH / COLS
+    BOX_HEIGHT = TETRIS_HEIGHT / ROWS;
+    FOOD_WIDTH = BOX_WIDTH * 0.7;
+    FOOD_HEIGHT = BOX_HEIGHT * 0.7;
+    FLAG_WIDTH = BOX_WIDTH / 2;
+    FLAG_HEIGHT = BASKETS_HEIGHT / 2;
+
+    renderBaskets();
 }
