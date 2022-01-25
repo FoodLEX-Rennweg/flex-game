@@ -8,8 +8,6 @@ function keyDown(e) {
         68: 'right',
         40: 'down',
         83: 'down',
-        38: 'rotate',
-        87: 'rotate',
         32: 'drop',
         67: 'end',
     };

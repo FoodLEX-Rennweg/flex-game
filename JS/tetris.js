@@ -31,12 +31,11 @@ const scoreTxt = document.getElementById('score-txt');
 let wrongItems = {};
 let penaltyCo2 = 0;
 
-// creates a new 4x4 shape in global variable 'current'
+
 function updateFoodNameTxt() {
     foodNameTxt.innerText = fallingFoodNames[fallingFoodNames.length - 1];
 }
 
-// 4x4 so as to cover the size when the shape is rotated
 function newFood() {
     let food = new Food(Math.floor(Math.random() * (foodNames.length) + 1));
     let rnd = Math.floor(Math.random() * COLS);
@@ -139,7 +138,6 @@ function evaluateLastRow() {
     )
 }
 
-// keep the element moving down, creating new shapes and clearing lines
 function tick() {
     shiftBoard(0, 1);
     if (tickCount % 8 === 0) {
@@ -173,35 +171,6 @@ function keyPress(key) {
             stopGame();
             showResults();
     }
-}
-
-// checks if the resulting position of current shape will be feasible
-function valid(offsetX, offsetY, newCurrent) {
-    offsetX = offsetX || 0;
-    offsetY = offsetY || 0;
-    offsetX = currentX + offsetX;
-    offsetY = currentY + offsetY;
-    newCurrent = newCurrent || current;
-
-    for (var y = 0; y < 4; ++y) {
-        for (var x = 0; x < 4; ++x) {
-            if (newCurrent[y][x]) {
-                if (typeof board[y + offsetY] == 'undefined'
-                    || typeof board[y + offsetY][x + offsetX] == 'undefined'
-                    || board[y + offsetY][x + offsetX]
-                    || x + offsetX < 0
-                    || y + offsetY >= ROWS
-                    || x + offsetX >= COLS) {
-                    if (offsetY == 1 && freezed) {
-                        lose = true; // lose if the current shape is settled at the top most row
-                        document.getElementById('play-btn').disabled = false;
-                    }
-                    return false;
-                }
-            }
-        }
-    }
-    return true;
 }
 
 function startGame() {
