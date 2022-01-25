@@ -100,7 +100,6 @@ function drawBasket(basket, length, index) {
 }
 
 function updateCanvasSize() {
-    console.log("resize");
     canvasWrapperRect = document.getElementsByClassName('game')[0].getBoundingClientRect();
 
     tetrisCanvas.width = canvasWrapperRect.width - 40;

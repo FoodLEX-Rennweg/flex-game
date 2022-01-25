@@ -36,6 +36,8 @@ $food_country = json_encode($food_country);
     <div class="results">
         <div class="results-txt">
             <h1>Glückwunsch!</h1>
+            <h2>Dein Punktestand beträgt:</h2>
+            <span class="co2" id="score-result"></span>
             <h2>Dein CO₂ Verbrauch beträgt:</h2>
             <span class="co2" id="co2-span">0 </span>
             <span class="co2">&nbsp;Tonnen CO₂</span>

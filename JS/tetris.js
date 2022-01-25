@@ -1,10 +1,10 @@
 const COLS = 7;
 const ROWS = 16;
 
-const DEFAULT_TICK_DELAY = 400;
-const SPEED_INCREASE_MILLIS = 30;
+const DEFAULT_TICK_DELAY = 750;
+const SPEED_INCREASE_MILLIS = 100;
 const MIN_TICK_DELAY = 150;
-const GAME_DURATION = 20;
+const GAME_DURATION = 120;
 
 let speedUpFlag;
 
@@ -166,15 +166,12 @@ function keyPress(key) {
         case 'down':
             tick();
             break;
-        case 'rotate':
-            shiftBoard(0, -1);
-            break;
         case 'drop':
-            while (valid(0, 1)) {
-                ++currentY;
-            }
             tick();
             break;
+        case 'end':
+            stopGame();
+            showResults();
     }
 }
 
@@ -253,7 +250,7 @@ function newGame() {
 
     renderInterval = setInterval(renderTetris, 30);
     tickInterval = setInterval(tick, tickDelay);
-    speedUpInterval = setInterval(increaseSpeed, 10000);
+    speedUpInterval = setInterval(increaseSpeed, 20000);
 
 
     const timerSpan = document.getElementById("timer-span");
@@ -299,6 +296,7 @@ function showResults() {
     }
 
     document.getElementById('co2-span').innerText = penaltyCo2;
+    document.getElementById('score-result').innerText = score;
 }
 
 function startTimer(duration, display) {
